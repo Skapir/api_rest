@@ -1,0 +1,96 @@
+<div class="w-full bg-white p-4 flex justify-between items-center shadow-md border-gray-150">
+    <!-- Botón Sidebar -->
+    <div class="flex items-center gap-4">
+        <button id="toggleSidebar" class="p-2 lg:hidden text-black">
+            <!-- Icono -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+
+    </div>
+     <!-- Título Panel Administrativo (Visible solo en móvil) -->
+    <div class="lg:hidden flex-1 text-center text-lg font-bold text-gray-900">
+        Panel Administrativo
+    </div>
+    <!-- Dropdown usuario -->
+    <div class="relative inline-block text-left ml-4 ">
+        <div>
+            <button type="button" id="userMenuButton" class="inline-flex items-center gap-x-2 rounded-full bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none transition">
+                
+                <!-- Avatar dinámico -->
+                <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-indigo-500 text-white text-sm font-medium">
+                    {{ request.user.first_name|default:request.user.username|slice:":2" }}
+                </span>
+
+                <!-- Nombre usuario (solo escritorio) -->
+                <span class="hidden md:inline">
+                    {{ request.user.first_name|default:request.user.username }}
+                </span>
+
+                <!-- Flecha -->
+                <svg class="h-5 w-5 text-gray-400 transition-transform duration-150" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06 0L10 11.94l3.71-3.73a.75.75 0 011.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Dropdown -->
+        <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50 transition transform scale-95 opacity-0">
+            <div class="px-4 py-3 border-b border-gray-100">
+                <p class="text-sm text-gray-500">Bienvenido</p>
+                <p class="truncate text-sm font-medium text-gray-900">{{ request.user.email }}</p>
+            </div>
+            <div class="py-1">
+                <a href="{% url 'perfil_usuario' %}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                    Perfil
+                </a>
+                <a href="{% url 'token_panel' %}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                    Mi Token API
+                </a>
+            </div>
+            <div class="py-1">
+                <a href="{% url 'logout' %}" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition">
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.getElementById('userMenuButton');
+    const menuDropdown = document.getElementById('userDropdownMenu');
+    const toggleButton = document.getElementById('toggleSidebar');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sidebar = document.getElementById('sidebar');
+
+    menuButton.addEventListener('click', () => {
+        menuDropdown.classList.toggle('hidden');
+        if (!menuDropdown.classList.contains('hidden')) {
+            menuDropdown.classList.remove('scale-95', 'opacity-0');
+            menuDropdown.classList.add('scale-100', 'opacity-100');
+        } else {
+            menuDropdown.classList.add('scale-95', 'opacity-0');
+            menuDropdown.classList.remove('scale-100', 'opacity-100');
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!menuButton.contains(e.target) && !menuDropdown.contains(e.target)) {
+            if (!menuDropdown.classList.contains('hidden')) {
+                menuDropdown.classList.add('hidden');
+                menuDropdown.classList.remove('scale-100', 'opacity-100');
+                menuDropdown.classList.add('scale-95', 'opacity-0');
+            }
+        }
+    });
+    toggleButton.addEventListener('click', () => {
+       sidebar.classList.toggle('-translate-x-full');
+    });
+    closeSidebar.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+    });
+});
+</script>

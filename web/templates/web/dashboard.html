@@ -1,0 +1,137 @@
+{% extends "web/base_admin.html" %}
+
+{% block content %}
+
+<div>
+  
+{% include 'web/partials/breadcrumb.html' with breadcrumb_title="Dashboard" %}
+
+  <h3 class="text-base font-semibold text-gray-900">PANEL DE TOKEN</h3>
+
+  <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2">
+
+    <!-- TOKEN ACTUAL -->
+    <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6">
+      <dt>
+        <div class="absolute rounded-md bg-indigo-500 p-3">
+          <svg class="size-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m1-4a9 9 0 11-6 0 9 9 0 016 0z" />
+          </svg>
+        </div>
+        <p class="ml-16 truncate text-sm font-medium text-gray-500">Token Actual</p>
+      </dt>
+      <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
+        <p class="text-sm font-semibold text-gray-900 break-all max-w-xs cursor-pointer hover:text-blue-600" id="tokenText" onclick="copiarToken()">
+            {% if token %}
+                {{ token.token }}
+            {% else %}
+                Sin token
+            {% endif %}
+        </p>
+      </dd>
+    </div>
+
+    <!-- SOLICITUDES REALIZADAS -->
+    <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6">
+      <dt>
+        <div class="absolute rounded-md bg-indigo-500 p-3">
+          <svg class="size-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 6h18M3 14h18M3 18h18"/>
+          </svg>
+        </div>
+        <p class="ml-16 truncate text-sm font-medium text-gray-500">Solicitudes Realizadas</p>
+      </dt>
+      <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
+        <p class="text-2xl font-semibold text-gray-900">
+            {% if token %}{{ token.solicitudes_realizadas }}{% else %}0{% endif %}
+        </p>
+      </dd>
+    </div>
+
+    <!-- ULTIMA SOLICITUD -->
+    <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow-sm sm:px-6 sm:pt-6">
+      <dt>
+        <div class="absolute rounded-md bg-indigo-500 p-3">
+          <svg class="size-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 19h14"/>
+          </svg>
+        </div>
+        <p class="ml-16 truncate text-sm font-medium text-gray-500">Última Solicitud</p>
+      </dt>
+      <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
+        <p class="text-sm font-semibold text-gray-900">
+            {% if token %}{{ token.updated_at|date:"j \d\e F \d\e Y \a \l\a\s H:i" }}{% else %}Sin uso{% endif %}
+        </p>
+      </dd>
+    </div>
+
+  </dl>
+</div>
+
+    <!-- Global notification (hidden initially) -->
+    <div id="alertaCopiado" aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 hidden">
+    <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+        <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black/5 transform transition ease-out duration-300 translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2">
+        <div class="p-4">
+            <div class="flex items-start">
+            <div class="shrink-0">
+                <svg class="size-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+            <div class="ml-3 w-0 flex-1 pt-0.5">
+                <p class="text-sm font-medium text-gray-900">¡Token copiado!</p>
+                <p class="mt-1 text-sm text-gray-500">Puedes usarlo en tus solicitudes API.</p>
+            </div>
+            <div class="ml-4 flex shrink-0">
+                <button type="button" onclick="cerrarNotificacion()" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <span class="sr-only">Cerrar</span>
+                <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                </svg>
+                </button>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    </div>
+
+</div>
+<script>
+function copiarToken() {
+    const tokenElement = document.getElementById('tokenText');
+    const texto = tokenElement.innerText;
+    navigator.clipboard.writeText(texto).then(function() {
+        const alerta = document.getElementById('alertaCopiado');
+        alerta.classList.remove('hidden');
+        
+        // Mostrar con animación
+        setTimeout(() => {
+            alerta.querySelector('div.pointer-events-auto').classList.replace('translate-y-2', 'translate-y-0');
+            alerta.querySelector('div.pointer-events-auto').classList.replace('opacity-0', 'opacity-100');
+            alerta.querySelector('div.pointer-events-auto').classList.replace('sm:translate-x-2', 'sm:translate-x-0');
+        }, 10);
+
+        // Ocultar después de 4 segundos
+        setTimeout(cerrarNotificacion, 4000);
+    });
+}
+
+function cerrarNotificacion() {
+    const alerta = document.getElementById('alertaCopiado');
+    if (!alerta.classList.contains('hidden')) {
+        alerta.querySelector('div.pointer-events-auto').classList.replace('translate-y-0', 'translate-y-2');
+        alerta.querySelector('div.pointer-events-auto').classList.replace('opacity-100', 'opacity-0');
+        alerta.querySelector('div.pointer-events-auto').classList.replace('sm:translate-x-0', 'sm:translate-x-2');
+        
+        setTimeout(() => {
+            alerta.classList.add('hidden');
+        }, 300); // Esperamos a que termine la animación antes de ocultarlo
+    }
+}
+</script>
+
+{% endblock %}

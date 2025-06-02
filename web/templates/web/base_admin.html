@@ -1,0 +1,28 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Panel - Home API{% endblock %}</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal flex flex-col min-h-screen">
+
+    
+   
+    <div class="flex flex-grow">
+        <!-- Sidebar -->
+        {% include 'web/partials/sidebar.html' %}
+            <!-- Contenido principal -->
+            <div class="flex flex-col flex-grow">
+                {% include 'web/partials/header_panel.html' %} 
+                <main class="flex-grow p-8">
+                    
+                    {% block content %}
+                        
+                    {% endblock %}
+                </main>
+            </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% if messages %}
+    <div id="alert-container" class="space-y-4 mb-4">
+        {% for message in messages %}
+            <div class="alert-item flex items-center gap-3 p-4 rounded-md border shadow-sm
+                {% if message.tags == 'error' %}
+                    bg-red-50 border-red-300 text-red-800
+                {% elif message.tags == 'success' %}
+                    bg-green-50 border-green-300 text-green-800
+                {% elif message.tags == 'warning' %}
+                    bg-yellow-50 border-yellow-300 text-yellow-800
+                {% elif message.tags == 'info' %}
+                    bg-blue-50 border-blue-300 text-blue-800
+                {% endif %}
+            ">
+                <div class="text-2xl">
+                    {% if message.tags == 'success' %}
+                        ✅
+                    {% elif message.tags == 'error' %}
+                        ❌
+                    {% elif message.tags == 'warning' %}
+                        ⚠️
+                    {% elif message.tags == 'info' %}
+                        ℹ️
+                    {% endif %}
+                </div>
+                <div class="flex-1 text-sm font-medium">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Script para ocultar automáticamente las alertas después de 4 segundos -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const alerts = document.querySelectorAll('.alert-item');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('opacity-0');
+                    alert.classList.add('transition');
+                    alert.classList.add('duration-500');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 5000); // 5 segundos
+            });
+        });
+    </script>
+{% endif %}

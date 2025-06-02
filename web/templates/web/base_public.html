@@ -1,0 +1,24 @@
+{% load static tailwind_tags %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Home API{% endblock %}</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal flex flex-col min-h-screen">
+
+    <!-- Header Global (Siempre visible) -->
+    {% include 'web/partials/header.html' %}
+    <div class="flex-grow p-8">
+        <main class="p-8">
+            
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+    <!-- Footer Global (Siempre visible) -->
+     {% include 'web/partials/footer.html' %}
+</body>
+</html>

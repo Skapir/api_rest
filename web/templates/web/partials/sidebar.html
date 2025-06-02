@@ -1,0 +1,80 @@
+<div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:relative lg:block z-50 ">
+    <div class="p-6 flex justify-between items-center">
+        <span class="font-bold text-blue-600 text-2xl">Home API</span>
+
+        <!-- Botón X solo visible en móviles -->
+        <button id="closeSidebar" class="lg:hidden text-gray-700 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <nav class="space-y-2 px-4">
+        {% if request.user.is_superuser %}
+        <!-- Dashboard Super Usuario-->
+        <a href="{% url 'estadisticas_tokens' %}" 
+           class="{% if request.path == '/token/estadisticas/' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %} flex items-center p-3 rounded transition">
+            <!-- Icono -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6m-6 0H5v10h14V12h-6z" />
+            </svg>
+            Estadisticas Tokens
+        </a>
+         <!-- Reportes -->
+        <a href="{% url 'reportes' %}" 
+           class="{% if request.path == '/reportes/' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %} flex items-center p-3 rounded transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m4 0V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10m16 0H3" />
+            </svg>
+            Reportes
+        </a>
+
+        <!-- Usuarios -->
+        <a href="{% url 'usuarios' %}" 
+           class="{% if request.path == '/usuarios/' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %} flex items-center p-3 rounded transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M15 11a4 4 0 10-8 0 4 4 0 008 0z" />
+            </svg>
+            Usuarios
+        </a>
+
+        {% else %}
+        <!-- Dashboard Usuario Normales-->
+        <a href="{% url 'dashboard' %}" 
+           class="{% if request.path == '/dashboard/' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %} flex items-center p-3 rounded transition">
+            <!-- Icono -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6m-6 0H5v10h14V12h-6z" />
+            </svg>
+            Dashboard
+        </a>
+
+         <!-- Usuarios Normales -->
+        <a href="{% url 'token_panel' %}" 
+           class="{% if request.path == '/token/' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %} flex items-center p-3 rounded transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M15 11a4 4 0 10-8 0 4 4 0 008 0z" />
+            </svg>
+            Token
+        </a>
+
+        <!-- Usuarios Normales -->
+        <a href="{% url 'token_documentacion' %}" 
+           class="{% if request.path == '/token/documentacion/' %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %} flex items-center p-3 rounded transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M15 11a4 4 0 10-8 0 4 4 0 008 0z" />
+            </svg>
+            Documentación
+        </a>
+   {% endif %}
+        <!-- Cerrar sesión -->
+        <a href="{% url 'logout' %}" 
+           class="text-red-500 hover:bg-red-100 flex items-center p-3 rounded transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+            </svg>
+            Cerrar Sesión
+        </a>
+    </nav>
+</div>

@@ -1,0 +1,21 @@
+# Entorno virtual
+venv/
+env/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Archivos de base de datos
+*.sqlite3
+
+# Archivos de configuración local
+.env
+
+# Archivos de sistema
+.DS_Store
+*.log
+
+# Archivos de Tailwind y node (si los usaras)
+node_modules/
+build/

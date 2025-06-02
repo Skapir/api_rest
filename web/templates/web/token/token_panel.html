@@ -1,0 +1,214 @@
+{% extends 'web/base_admin.html' %}
+
+{% block content %}
+
+<div >
+  {% include 'web/partials/breadcrumb.html' with breadcrumb_title="token" %}
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold text-gray-900">Mis Tokens</h1>
+      <p class="mt-2 text-sm text-gray-700">Aquí puedes ver todos los tokens generados y su estado actual.</p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <!-- Botón que solo abre el modal (YA NO ESTÁ EN EL FORM) -->
+        <button type="button" onclick="abrirModalToken()" class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
+        ⩥  Generar nuevo token
+        </button>
+    </div>
+  </div>
+
+  <div class="-mx-4 mt-8 sm:-mx-0">
+    <table class="min-w-full divide-y divide-gray-300 rounded-lg overflow-hidden shadow-sm bg-white">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6">Token</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Fecha de Creación</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Estado</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Solicitudes</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Última Solicitud</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 bg-white">
+        {% for token in page_obj  %}
+        <tr>
+          <td class="py-4 pr-3 pl-4 text-sm text-gray-900 sm:pl-6 break-all">{{ token.token|slice:":10" }}...
+        <!-- Botón de ver token completo -->
+            <button onclick="mostrarToken('{{ token.token }}')" class="text-gray-400 hover:text-indigo-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+                </svg>
+            </button>          
+          
+          </td>
+          <td class="px-3 py-4 text-sm text-gray-500">{{ token.created_at }}</td>
+          <td class="px-3 py-4 text-sm">
+            {% if token.is_active %}
+              <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">Activo</span>
+            {% else %}
+              <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">Inactivo</span>
+            {% endif %}
+          </td>
+          <td class="px-3 py-4 text-sm text-gray-500">0</td>
+          <td class="px-3 py-4 text-sm text-gray-500">{{ token.updated_at }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center py-4 text-gray-500">No tienes tokens generados aún.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+<!-- Paginación -->
+<div class="mt-6 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+  <div class="flex flex-1 justify-between sm:hidden">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Anterior</a>
+    {% endif %}
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Siguiente</a>
+    {% endif %}
+  </div>
+  <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+    <div>
+      <p class="text-sm text-gray-700">
+        Mostrando
+        <span class="font-medium">{{ page_obj.start_index }}</span>
+        a
+        <span class="font-medium">{{ page_obj.end_index }}</span>
+        de
+        <span class="font-medium">{{ page_obj.paginator.count }}</span>
+        resultados
+      </p>
+    </div>
+    <div>
+      <nav class="isolate inline-flex -space-x-px rounded-md shadow" aria-label="Pagination">
+
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+          <span class="sr-only">Anterior</span>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06L6.47 10.53a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
+        </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <a href="?page={{ num }}" aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white">{{ num }}</a>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-gray-300 hover:bg-gray-50">
+          <span class="sr-only">Siguiente</span>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
+        </a>
+        {% endif %}
+
+      </nav>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div id="modalToken" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/30 backdrop-blur-sm">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+
+    <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100">
+      <svg class="size-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+      </svg>
+    </div>
+
+    <h3 class="text-lg font-semibold text-gray-900 text-center mt-2">Generar nuevo token</h3>
+    <p class="mt-2 text-sm text-gray-500 text-center">
+      ¿Estás seguro de generar un nuevo token?
+    </p>
+    <p class="mt-2 text-sm text-red-500 text-center">
+      El anterior se anulará automáticamente.
+    </p>
+
+    <div class="mt-5 flex justify-end space-x-3">
+      <button type="button" class="rounded-md bg-gray-300 px-3 py-2 text-sm text-gray-900 hover:bg-gray-400" onclick="cerrarModalToken()">Cancelar</button>
+      <button type="button" onclick="confirmarGenerarToken()" class="rounded-md bg-indigo-600 px-3 py-2 text-sm text-white hover:bg-indigo-500">Generar Token</button>
+    </div>
+  </div>
+</div>
+<!-- Modal de token -->
+<div id="modalVerToken" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/30 backdrop-blur-sm">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    
+    <h3 class="text-lg font-semibold text-gray-900 text-center mt-2">Token Completo</h3>
+    
+    <p id="tokenCompleto" class="mt-4 text-center break-all text-sm text-gray-600 cursor-pointer hover:text-indigo-600" title="Haz clic para copiar">
+        <!-- Token dinámico -->
+    </p>
+
+    <p id="copiadoMsg" class="text-center text-green-500 text-sm mt-2 hidden">✅¡Token copiado al portapapeles!</p>
+
+    <div class="mt-5 flex justify-center">
+      <button onclick="cerrarModalOjitoToken()" class="rounded-md bg-indigo-600 px-3 py-2 text-sm text-white hover:bg-indigo-500">Cerrar</button>
+    </div>
+  </div>
+</div>
+<!-- Formulario oculto para enviar token -->
+<form id="tokenForm" method="post" action="{% url 'token_create' %}">
+  {% csrf_token %}
+</form>
+
+<script>
+function abrirModalToken() {
+    const modal = document.getElementById('modalToken');
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function cerrarModalToken() {
+    const modal = document.getElementById('modalToken');
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+}
+
+function confirmarGenerarToken() {
+    document.getElementById('tokenForm').submit();
+}
+
+// OJITO: Función para mostrar el token completo en el modal
+function mostrarToken(token) {
+    const modal = document.getElementById('modalVerToken');
+    const tokenText = document.getElementById('tokenCompleto');
+    const copiadoMsg = document.getElementById('copiadoMsg');
+
+    tokenText.textContent = token;
+    
+    // Resetear mensaje de copiado
+    copiadoMsg.classList.add("hidden");
+
+    // Al hacer click en el token -> Copiar
+    tokenText.onclick = () => {
+        navigator.clipboard.writeText(token).then(() => {
+            copiadoMsg.classList.remove("hidden");
+        });
+        setTimeout(() => {
+            copiadoMsg.classList.add("hidden");
+        }, 2000); // Ocultar mensaje después de 2 segundos
+    };
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+}
+
+function cerrarModalOjitoToken() {
+    const modal = document.getElementById('modalVerToken');
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+}
+
+</script>
+
+{% endblock %}

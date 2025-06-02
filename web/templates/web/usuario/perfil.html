@@ -1,0 +1,129 @@
+{% extends "web/base_admin.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex justify-center mt-10">
+    <div class="w-full max-w-2xl bg-white shadow-sm rounded-lg p-8 space-y-8">
+        {% include "web/partials/alerts.html" %}
+        <h2 class="text-3xl font-bold text-gray-900 text-center">Mi Perfil</h2>
+
+        <!-- Avatar -->
+        <div class="flex justify-center">
+            <div class="relative w-28 h-28">
+                <img class="rounded-full object-cover w-full h-full border border-gray-300" src="https://ui-avatars.com/api/?name={{ usuario.first_name }}&background=4F46E5&color=fff" alt="Avatar">
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-black bg-opacity-40 cursor-pointer rounded-full transition">
+                    <span class="text-white text-sm">Editar</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-gray-500 text-center text-sm">Avatar automático</p>
+
+        <!-- Información -->
+        <dl class="space-y-6 divide-y divide-gray-200">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <dt class="font-medium text-gray-700">Nombre Usuario :</dt>
+                <dd class="text-gray-900 sm:col-span-2">{{ usuario.first_name }}</dd>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <dt class="font-medium text-gray-700">Email :</dt>
+                <dd class="text-gray-900 sm:col-span-2">{{ usuario.email }}</dd>
+            </div>
+            <div class="text-center pt-6">
+                <button onclick="abrirModalContrasena()" class="inline-block rounded-lg bg-blue-600 px-6 py-2 text-white font-semibold hover:bg-blue-500 transition">
+                    Actualizar Contraseña
+                </button>
+            </div>
+        </dl>
+    </div>
+</div>
+
+<!-- Modal Cambiar Contraseña -->
+<div id="modalContrasena" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-300">
+    <form method="POST" class="bg-white rounded-xl shadow-2xl p-8 space-y-6 w-full max-w-md relative">
+        {% csrf_token %}
+        <input type="hidden" name="password_form" value="1">
+
+        <!-- Botón cerrar -->
+        <button type="button" onclick="cerrarModalContrasena()" class="absolute right-4 top-4 text-gray-400 hover:text-blue-600 text-lg">✖️</button>
+
+        <h2 class="text-2xl font-bold text-gray-900 text-center">Cambiar Contraseña</h2>
+
+        {% if modal_messages %}
+            <div id="modalAlert" class="bg-red-100 text-red-800 px-4 py-2 rounded text-sm text-center space-y-1">
+                {% for msg in modal_messages %}
+                <p>{{ msg }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Contraseña Actual</label>
+                <div class="mt-1 relative">
+                    <input type="password" id="actual" name="actual" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm px-4 py-2" required>
+                    <button type="button" onclick="togglePassword('actual')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">👁️</button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nueva Contraseña</label>
+                <div class="mt-1 relative">
+                    <input type="password" id="nueva" name="nueva" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm px-4 py-2" required>
+                    <button type="button" onclick="togglePassword('nueva')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">👁️</button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Repetir Nueva Contraseña</label>
+                <div class="mt-1 relative">
+                    <input type="password" id="repetir" name="repetir" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm px-4 py-2" required>
+                    <button type="button" onclick="togglePassword('repetir')" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">👁️</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4">
+            <button type="button" onclick="cerrarModalContrasena()" class="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 transition">Cancelar</button>
+            <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 transition">Actualizar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function abrirModalContrasena() {
+    const modal = document.getElementById('modalContrasena');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function cerrarModalContrasena() {
+    const modal = document.getElementById('modalContrasena');
+    modal.classList.add('hidden');
+}
+
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+</script>
+
+{% if abrir_modal %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    abrirModalContrasena();
+});
+
+setTimeout(() => {
+    const modalAlert = document.getElementById('modalAlert');
+    if(modalAlert) {
+        modalAlert.classList.add('opacity-0');
+        setTimeout(() => {
+            modalAlert.remove();
+        }, 500);
+    }
+}, 3000);
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'web/base_admin.html' %}
+{% load static %}
+
+{% block title %}Tokens por Día{% endblock %}
+
+{% block content %}
+  <h1 class="text-2xl font-bold mb-4">Tokens por Día (últimos 30 días)</h1>
+  <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+    <canvas id="tokensDiaChart"></canvas>
+  </div>
+    
+  <!-- Chart.js local -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const ctx = document.getElementById('tokensDiaChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: {{ labels|safe }},
+          datasets: [{
+            label: 'Tokens por día',
+            data: {{ data|safe }},
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              display: true,
+              title: { display: true, text: 'Fecha' }
+            },
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Cantidad de Tokens' }
+            }
+          }
+        }
+      });
+    });
+    const ctx = document.getElementById('tokensChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',           // puedes cambiar a 'pie', 'line', etc.
+      data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+          label: 'Cantidad de Tokens',
+          data: {{ data|safe }},
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+{% endblock %}
