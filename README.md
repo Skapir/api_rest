@@ -23,7 +23,7 @@ Este proyecto está desplegado en:
 ## 📦 Instalación local
 
 ```bash
-git clone https://github.com/skapirofficial/api_rest.git
+git clone https://github.com/Skapir/api_rest.git
 cd api_rest
 python -m venv venv
 source venv/bin/activate    # o venv\Scripts\activate en Windows
@@ -39,11 +39,13 @@ python manage.py runserver
 Todas las solicitudes requieren autenticación por **token**.
 
 ### Formato del header:
+
 ```http
 Authorization: Token tu_token_aquí
 ```
 
 ### Ejemplo con `curl`:
+
 ```bash
 curl -H "Authorization: Token tu_token_aquí" https://api-rest-skapir-production.up.railway.app/api/pacientes/?search=12345678
 ```
@@ -59,6 +61,7 @@ GET /api/pacientes/?search=<DNI>
 ```
 
 **Respuesta exitosa:**
+
 ```json
 [
   {
@@ -72,6 +75,7 @@ GET /api/pacientes/?search=<DNI>
 ```
 
 **Respuesta cuando el DNI no existe:**
+
 ```json
 []
 ```
