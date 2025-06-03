@@ -49,7 +49,7 @@
               <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">Inactivo</span>
             {% endif %}
           </td>
-          <td class="px-3 py-4 text-sm text-gray-500">0</td>
+          <td class="px-3 py-4 text-sm text-gray-500">{% if token %}{{ token.total_requests }}{% else %}0{% endif %}</td>
           <td class="px-3 py-4 text-sm text-gray-500">{{ token.updated_at }}</td>
         </tr>
         {% empty %}

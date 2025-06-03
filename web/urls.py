@@ -3,6 +3,7 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 from . import views,tokens
 
+
 # Router para la API
 router = DefaultRouter()
 router.register(r'pacientes', views.PacienteApiView, basename='pacientes')

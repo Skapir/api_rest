@@ -43,7 +43,7 @@
       </dt>
       <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
         <p class="text-2xl font-semibold text-gray-900">
-            {% if token %}{{ token.solicitudes_realizadas }}{% else %}0{% endif %}
+            {% if token %}{{ token.total_requests }}{% else %}0{% endif %}
         </p>
       </dd>
     </div>
@@ -56,7 +56,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M3 11h18M5 19h14"/>
           </svg>
         </div>
-        <p class="ml-16 truncate text-sm font-medium text-gray-500">Última Solicitud</p>
+        <p class="ml-16 truncate text-sm font-medium text-gray-500">Última Solicituddd</p>
       </dt>
       <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
         <p class="text-sm font-semibold text-gray-900">
@@ -69,7 +69,7 @@
 </div>
 
     <!-- Global notification (hidden initially) -->
-    <div id="alertaCopiado" aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 hidden">
+    <div id="alertaCopiado" aria-live="assertive" class="pointer-events-none fixed inset-0 items-end px-4 py-6 sm:items-start sm:p-6 hidden">
     <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
         <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black/5 transform transition ease-out duration-300 translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2">
         <div class="p-4">

@@ -12,11 +12,16 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+import dj_database_url
+from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+DATABASES = {
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
+}
+print("DATABASE_URL:", config("DATABASE_URL"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -26,8 +31,15 @@ SECRET_KEY = 'django-insecure-$wpu67@h^09+przlh@mqr7dra8)joy$#ainspfj%w8o89@hncf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+   'localhost',
+    '127.0.0.1',
+    '89e0-38-25-122-24.ngrok-free.app'  # <--- tu dominio ngrok
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://89e0-38-25-122-24.ngrok-free.app"
+]
 
 # Application definition
 
@@ -91,16 +103,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'api_rest',
-        'USER': 'postgres',
-        'PASSWORD': 'skapir',
-        'HOST': 'localhost',
-        'PORT': '5433',
-    }
-}
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.postgresql',
+   #     'NAME': 'api_rest',
+    #    'USER': 'postgres',
+     #   'PASSWORD': 'skapir',
+      #  'HOST': 'localhost',
+       # 'PORT': '5433',
+   # }
+#}
 
 
 # Password validation

@@ -9,11 +9,15 @@ from django.urls import reverse_lazy
 from datetime import timedelta
 from .models import PasswordResetRequest,UserToken,paciente_api
 from django.utils import timezone
-from rest_framework import viewsets,filters
+from rest_framework import viewsets,filters, status
 from .serializers import PacienteApiSerializer
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.db.models import Count
+from rest_framework.permissions import IsAuthenticated
+from .authentication import CustomTokenAuthentication
+from rest_framework.response import Response
+
 
 # Esta clase se encarga de la vista de confirmación del restablecimiento de contraseña
 # y se utiliza para personalizar el comportamiento de la vista.
@@ -86,8 +90,38 @@ class dashboard(LoginRequiredMixin, View):
 class PacienteApiView(viewsets.ReadOnlyModelViewSet):
     queryset = paciente_api.objects.all()
     serializer_class = PacienteApiSerializer
+    authentication_classes = [CustomTokenAuthentication]
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter]
     search_fields = ['hi_ndocum']
+
+    def list(self, request, *args, **kwargs):
+        # Validar token
+        auth_header = request.headers.get('Authorization', '')
+        if auth_header.startswith('Token '):
+            token = auth_header.split('Token ')[1].strip()
+            try:
+                user_token = UserToken.objects.get(token=token, is_active=True)
+                user_token.total_requests += 1
+                user_token.save()
+            except UserToken.DoesNotExist:
+                return Response({'detail': 'Token inválido o inactivo.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Filtro aplicado al queryset
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Si no hay resultados, mostrar mensaje personalizado
+        if not queryset.exists():
+            return Response({'detail': 'Paciente no encontrado con ese DNI.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Si existe al menos un resultado, continuar flujo normal
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 def index(request):
     return render(request, 'web/index.html')

@@ -28,6 +28,10 @@ class UserToken(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        db_table = 'web_usertoken'  # <- importante
+        managed = False             # <- muy importante
+
     def __str__(self):
         return f"{self.user.username} - {self.token}"
 
@@ -36,6 +40,7 @@ class UserToken(models.Model):
         self.created_at = timezone.now()
         self.total_requests = 0
         self.save()
+
 
 class paciente_api(models.Model):
     hi_nreg = models.CharField(max_length=20, primary_key=True)
