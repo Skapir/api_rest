@@ -1,15 +1,35 @@
-# API REST de Consulta de Pacientes - Skapir
+# 🔗 API REST de Consulta de Pacientes
 
-Este proyecto es una API REST desarrollada con Django y Django REST Framework para permitir la **consulta de información de pacientes** por número de DNI. El backend se encuentra desplegado en Railway y está protegido mediante **autenticación por token**.
+API REST desarrollada con **Django** y **Django REST Framework** para la consulta segura de información de pacientes por número de DNI, orientada a la integración entre sistemas clínicos y administrativos.
+
+El backend se encuentra desplegado en **Railway** y protegido mediante **autenticación por token**.
+
+---
+
+## 🎯 Problema que resuelve
+En entornos de salud, múltiples sistemas requieren consultar información básica de pacientes de forma rápida y segura, evitando accesos directos a bases de datos o procesos manuales.
+
+Esta API centraliza la consulta de pacientes por DNI, permitiendo la integración controlada entre sistemas internos, reduciendo errores y mejorando la interoperabilidad.
 
 ---
 
 ## 🔧 Funcionalidades principales
+- Autenticación por token para control de acceso.
+- Consulta de pacientes por DNI (`hi_ndocum`).
+- Filtros de búsqueda mediante parámetros GET.
+- Control de accesos no autorizados.
+- Backend desplegado y accesible públicamente.
+- Pensada para integración entre sistemas.
 
-- Autenticación por token para controlar el acceso a la API.
-- Endpoint para buscar pacientes por DNI (`hi_ndocum`).
-- Panel para visualizar tokens activos y controlar la cantidad de consultas realizadas por token.
-- Protección contra consultas no autorizadas.
+---
+
+## 👨‍💻 Mi rol en el proyecto
+- Diseño de la arquitectura de la API.
+- Desarrollo completo del backend con Django REST Framework.
+- Implementación de autenticación por token.
+- Definición de endpoints y validaciones.
+- Despliegue del servicio en Railway.
+- Enfoque en seguridad y reutilización por terceros.
 
 ---
 
@@ -94,7 +114,7 @@ GET /api/pacientes/?search=<DNI>
 ## ✉️ Contacto
 
 Desarrollado por **Skapir (Sergio P.)**  
-📧 skapir.dev@gmail.com
+📧 sperezn.dev@gmail.com
 
 ---
 
